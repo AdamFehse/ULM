@@ -8,7 +8,6 @@ class ULM_Shortcodes {
         add_shortcode( 'ulm_alumni_directory', array( $this, 'alumni_directory' ) );
         add_shortcode( 'ulm_where_are_they_now', array( $this, 'where_are_they_now' ) );
         add_shortcode( 'ulm_community_screenings', array( $this, 'community_screenings' ) );
-        add_shortcode( 'ulm_alumni_map', array( $this, 'alumni_map' ) );
     }
 
     public function enqueue_variables() {
@@ -144,60 +143,4 @@ class ULM_Shortcodes {
         return ob_get_clean();
     }
 
-    public function alumni_map( $atts ) {
-        $atts = shortcode_atts(
-            array(
-                'height' => '420px',
-                'lat' => '39.8283',
-                'lng' => '-98.5795',
-                'zoom' => '4',
-            ),
-            $atts,
-            'ulm_alumni_map'
-        );
-
-        wp_enqueue_style(
-            'leaflet',
-            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-            array(),
-            '1.9.4'
-        );
-        wp_style_add_data( 'leaflet', 'integrity', 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=' );
-        wp_style_add_data( 'leaflet', 'crossorigin', '' );
-
-        wp_enqueue_script(
-            'leaflet',
-            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-            array(),
-            '1.9.4',
-            true
-        );
-        wp_script_add_data( 'leaflet', 'integrity', 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=' );
-        wp_script_add_data( 'leaflet', 'crossorigin', '' );
-
-        wp_enqueue_style(
-            'ulm-alumni-map',
-            ULM_PLUGIN_URL . 'assets/css/alumni-map.css',
-            array( 'ulm-variables', 'leaflet' ),
-            ULM_VERSION
-        );
-
-        wp_enqueue_script(
-            'ulm-alumni-map',
-            ULM_PLUGIN_URL . 'assets/js/alumni-map-stub.js',
-            array( 'leaflet' ),
-            ULM_VERSION,
-            true
-        );
-
-        ob_start();
-        $map_config = array(
-            'height' => $atts['height'],
-            'lat' => $atts['lat'],
-            'lng' => $atts['lng'],
-            'zoom' => $atts['zoom'],
-        );
-        include ULM_PLUGIN_DIR . 'templates/shortcode-alumni-map.php';
-        return ob_get_clean();
-    }
 }
