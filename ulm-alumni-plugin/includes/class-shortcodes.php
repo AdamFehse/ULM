@@ -99,10 +99,44 @@ class ULM_Shortcodes {
 
     public function community_screenings( $atts ) {
         wp_enqueue_style(
+            'leaflet',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+            array(),
+            '1.9.4'
+        );
+        wp_style_add_data( 'leaflet', 'integrity', 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=' );
+        wp_style_add_data( 'leaflet', 'crossorigin', '' );
+
+        wp_enqueue_script(
+            'leaflet',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+            array(),
+            '1.9.4',
+            true
+        );
+        wp_script_add_data( 'leaflet', 'integrity', 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=' );
+        wp_script_add_data( 'leaflet', 'crossorigin', '' );
+
+        wp_enqueue_style(
             'ulm-community-screenings',
             ULM_PLUGIN_URL . 'assets/css/community-screenings.css',
             array( 'ulm-variables' ),
             ULM_VERSION
+        );
+
+        wp_enqueue_style(
+            'ulm-alumni-map',
+            ULM_PLUGIN_URL . 'assets/css/alumni-map.css',
+            array( 'ulm-variables', 'leaflet' ),
+            ULM_VERSION
+        );
+
+        wp_enqueue_script(
+            'ulm-alumni-map',
+            ULM_PLUGIN_URL . 'assets/js/alumni-map-stub.js',
+            array( 'leaflet' ),
+            ULM_VERSION,
+            true
         );
 
         ob_start();

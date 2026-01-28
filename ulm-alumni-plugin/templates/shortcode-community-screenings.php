@@ -21,4 +21,13 @@ Target: Phase 2 implementation
         <p><?php esc_html_e( 'Community Screenings feature coming soon.', 'ulm-alumni' ); ?></p>
         <p><?php esc_html_e( 'This section will display alumni community screenings, events, and gatherings.', 'ulm-alumni' ); ?></p>
     </div>
+
+    <div
+        id="ulm-alumni-map"
+        class="ulm-alumni-map"
+        data-lat="39.8283"
+        data-lng="-98.5795"
+        data-zoom="4"
+        aria-label="<?php esc_attr_e( 'Alumni map', 'ulm-alumni' ); ?>">
+    </div>
 </div>
