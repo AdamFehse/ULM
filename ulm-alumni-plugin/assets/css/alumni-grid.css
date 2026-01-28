@@ -1,0 +1,231 @@
+/**
+ * Alumni Directory Grid Layout - Location Card Style
+ * Modern card layout with photo on top and text below
+ */
+
+.ulm-container {
+    max-width: var(--ulm-max-width);
+    margin: 0 auto;
+    padding: var(--ulm-space-md);
+}
+
+.ulm-alumni-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: var(--ulm-space-md) 0;
+}
+
+/* Modern Card Layout - Photo on top, text below */
+.ulm-alumni-card {
+    background: var(--ulm-surface-1);
+    border: 1px solid var(--ulm-border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    animation: alumniSlideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes alumniSlideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Staggered entry animations for first 6 cards */
+.ulm-alumni-card:nth-child(1) { animation-delay: 0.1s; }
+.ulm-alumni-card:nth-child(2) { animation-delay: 0.2s; }
+.ulm-alumni-card:nth-child(3) { animation-delay: 0.3s; }
+.ulm-alumni-card:nth-child(4) { animation-delay: 0.4s; }
+.ulm-alumni-card:nth-child(5) { animation-delay: 0.5s; }
+.ulm-alumni-card:nth-child(n+6) { animation-delay: 0.6s; }
+
+.ulm-alumni-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ulm-shadow-2);
+    border-color: var(--ulm-primary);
+}
+
+/* Rectangular Photo - Full Width at Top */
+.ulm-alumni-photo {
+    width: 100%;
+    height: 160px;
+    min-height: 160px;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    object-position: center top;
+    background: var(--ulm-surface-2);
+    display: block;
+    flex-shrink: 0;
+}
+
+/* Card Content Container */
+.ulm-alumni-card-info {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-height: 5.5rem;
+}
+
+/* Name - Bold Typography */
+.ulm-alumni-name {
+    font-family: var(--ulm-font-heading);
+    font-size: 0.95rem;
+    color: var(--ulm-text);
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    line-height: 1.3;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Instrument/Role - Secondary Text */
+.ulm-alumni-instrument {
+    color: var(--ulm-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Years and Metadata - Tertiary Text */
+.ulm-alumni-years {
+    color: var(--ulm-text-subtle);
+    font-size: 0.75rem;
+    margin-top: auto;
+}
+
+/* Hidden elements - Only shown in modal */
+.ulm-alumni-bio {
+    display: none;
+}
+
+/* Focus States - Accessibility */
+.ulm-alumni-card:focus-within {
+    outline: var(--ulm-focus-outline);
+    outline-offset: var(--ulm-focus-offset);
+}
+
+.ulm-alumni-card:focus-visible {
+    outline: var(--ulm-focus-outline);
+    outline-offset: var(--ulm-focus-offset);
+}
+
+/* Tablet Breakpoint - 768px */
+@media (max-width: 768px) {
+    .ulm-alumni-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .ulm-alumni-photo {
+        height: 120px;
+        min-height: 120px;
+    }
+
+    .ulm-alumni-card-info {
+        padding: 0.75rem;
+        min-height: 4.75rem;
+    }
+
+    .ulm-alumni-name {
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .ulm-alumni-instrument {
+        font-size: 0.75rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .ulm-alumni-years {
+        font-size: 0.7rem;
+    }
+}
+
+/* Mobile Breakpoint - 480px */
+@media (max-width: 480px) {
+    .ulm-alumni-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .ulm-alumni-photo {
+        height: 100px;
+        min-height: 100px;
+    }
+
+    .ulm-alumni-card-info {
+        padding: 0.5rem;
+        min-height: 4.25rem;
+    }
+
+    .ulm-alumni-name {
+        font-size: 0.85rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .ulm-alumni-instrument {
+        font-size: 0.65rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .ulm-alumni-years {
+        font-size: 0.6rem;
+    }
+
+    .ulm-alumni-card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* Media Gallery Styles */
+.ulm-alumni-media-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.ulm-alumni-media-item {
+    display: inline-block;
+}
+
+.ulm-alumni-media-item a {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: var(--ulm-surface-2);
+    border: 1px solid var(--ulm-border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--ulm-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ulm-alumni-media-item a:hover {
+    background: var(--ulm-primary);
+    color: var(--ulm-text-inverse);
+    border-color: var(--ulm-primary);
+}

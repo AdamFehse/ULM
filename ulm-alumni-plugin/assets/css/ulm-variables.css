@@ -1,0 +1,121 @@
+/**
+ * ULM Alumni Platform - Design System Variables
+ * Shared across all features
+ */
+
+:root {
+    color-scheme: light dark;
+
+    /* Colors - Light Mode */
+    --ulm-primary: #2c5aa0;
+    --ulm-primary-rgb: 44, 90, 160;
+    --ulm-secondary: #d4a574;
+    --ulm-accent: #8b4513;
+    --ulm-danger: #ef4444;
+    --ulm-danger-hover: #dc2626;
+
+    --ulm-text: #1f2937;
+    --ulm-text-light: #4b5563;
+    --ulm-text-muted: #6b7280;
+    --ulm-text-subtle: #9ca3af;
+    --ulm-text-inverse: #ffffff;
+
+    --ulm-bg: #ffffff;
+    --ulm-bg-light: #f5f5f5;
+    --ulm-surface-1: #ffffff;
+    --ulm-surface-2: #f3f4f6;
+    --ulm-surface-3: #f9fafb;
+
+    --ulm-border: #e5e7eb;
+    --ulm-border-strong: #d1d5db;
+
+    --ulm-shadow-rgb: 0, 0, 0;
+    --ulm-shadow-1: 0 2px 8px rgba(var(--ulm-shadow-rgb), 0.08);
+    --ulm-shadow-2: 0 8px 24px rgba(var(--ulm-shadow-rgb), 0.12);
+    --ulm-shadow-3: 0 12px 32px rgba(var(--ulm-shadow-rgb), 0.08);
+
+    --ulm-overlay: rgba(0, 0, 0, 0.5);
+    --ulm-overlay-strong: rgba(0, 0, 0, 0.95);
+    --ulm-control-bg: rgba(255, 255, 255, 0.2);
+    --ulm-control-bg-hover: rgba(255, 255, 255, 0.3);
+
+    --ulm-surface-gradient: linear-gradient(135deg, var(--ulm-surface-2) 0%, var(--ulm-surface-1) 100%);
+    --ulm-surface-gradient-hover: linear-gradient(135deg, var(--ulm-surface-1) 0%, var(--ulm-surface-3) 100%);
+
+    /* Spacing */
+    --ulm-space-xs: 0.5rem;
+    --ulm-space-sm: 1rem;
+    --ulm-space-md: 2rem;
+    --ulm-space-lg: 3rem;
+    --ulm-space-xl: 4rem;
+
+    /* Typography */
+    --ulm-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --ulm-font-heading: Georgia, 'Times New Roman', serif;
+    --ulm-font-size-base: 16px;
+    --ulm-font-size-sm: 14px;
+    --ulm-font-size-lg: 18px;
+    --ulm-line-height: 1.6;
+
+    /* Layout */
+    --ulm-max-width: 1200px;
+    --ulm-border-radius: 4px;
+
+    /* Accessibility */
+    --ulm-focus-outline: 3px solid var(--ulm-primary);
+    --ulm-focus-offset: 2px;
+
+    /* Stats accents */
+    --ulm-stat-instruments: #ec4899;
+    --ulm-stat-decades: #06b6d4;
+    --ulm-stat-locations: #f59e0b;
+}
+
+/* Dark Mode - System Preference Detection */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ulm-primary: #5a8dd4;
+        --ulm-primary-rgb: 90, 141, 212;
+        --ulm-secondary: #e5c294;
+        --ulm-accent: #b8733f;
+        --ulm-danger: #f87171;
+        --ulm-danger-hover: #ef4444;
+
+        --ulm-text: #e5e7eb;
+        --ulm-text-light: #cbd5e1;
+        --ulm-text-muted: #9ca3af;
+        --ulm-text-subtle: #6b7280;
+        --ulm-text-inverse: #0b0f1a;
+
+        --ulm-bg: #111318;
+        --ulm-bg-light: #1f232b;
+        --ulm-surface-1: #161a21;
+        --ulm-surface-2: #1e2430;
+        --ulm-surface-3: #232a38;
+
+        --ulm-border: #2f3848;
+        --ulm-border-strong: #3a4559;
+
+        --ulm-shadow-rgb: 0, 0, 0;
+        --ulm-shadow-1: 0 2px 8px rgba(var(--ulm-shadow-rgb), 0.35);
+        --ulm-shadow-2: 0 8px 24px rgba(var(--ulm-shadow-rgb), 0.45);
+        --ulm-shadow-3: 0 12px 32px rgba(var(--ulm-shadow-rgb), 0.5);
+
+        --ulm-overlay: rgba(0, 0, 0, 0.6);
+        --ulm-overlay-strong: rgba(0, 0, 0, 0.95);
+        --ulm-control-bg: rgba(255, 255, 255, 0.16);
+        --ulm-control-bg-hover: rgba(255, 255, 255, 0.28);
+
+        --ulm-surface-gradient: linear-gradient(135deg, var(--ulm-surface-2) 0%, var(--ulm-surface-1) 100%);
+        --ulm-surface-gradient-hover: linear-gradient(135deg, var(--ulm-surface-1) 0%, var(--ulm-surface-3) 100%);
+
+        --ulm-stat-instruments: #f472b6;
+        --ulm-stat-decades: #22d3ee;
+        --ulm-stat-locations: #fbbf24;
+    }
+}
+
+.ulm-photo-placeholder {
+    background: var(--ulm-surface-2);
+    display: block;
+}

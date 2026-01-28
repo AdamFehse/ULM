@@ -1,0 +1,227 @@
+/* Where Are They Now - Location-Based Alumni View */
+
+.ulm-where-are-they-now {
+    padding: 0 1rem;
+}
+
+.ulm-location-section {
+    margin-bottom: 1rem;
+    border: 1px solid var(--ulm-border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--ulm-surface-1);
+    transition: all 0.3s ease;
+}
+
+.ulm-location-header {
+    padding: 1.5rem;
+    background: var(--ulm-surface-gradient);
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: var(--ulm-text);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-bottom: 1px solid var(--ulm-border);
+}
+
+.ulm-location-header:hover {
+    background: var(--ulm-surface-gradient-hover);
+    padding-left: 1.75rem;
+}
+
+.ulm-location-header::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 0.75rem;
+    background: linear-gradient(135deg, var(--ulm-primary) 0%, var(--ulm-secondary) 100%);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.ulm-location-header.expanded {
+    background: linear-gradient(135deg, var(--ulm-primary) 0%, var(--ulm-secondary) 100%);
+    color: var(--ulm-text-inverse);
+    border-bottom-color: transparent;
+}
+
+.ulm-location-header.expanded::after {
+    content: '−';
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+.ulm-location-header:not(.expanded)::after {
+    content: '+';
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+.ulm-alumni-count {
+    background: var(--ulm-control-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+.ulm-location-header.expanded .ulm-alumni-count {
+    background: var(--ulm-control-bg-hover);
+}
+
+.ulm-location-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.ulm-location-content.expanded {
+    max-height: 10000px;
+    padding: 1.5rem;
+}
+
+.ulm-location-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Mini alumni cards in location view */
+.ulm-location-alumni-card {
+    background: var(--ulm-surface-1);
+    border: 1px solid var(--ulm-border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.ulm-location-alumni-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ulm-shadow-2);
+    border-color: var(--ulm-primary);
+}
+
+.ulm-location-photo {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: var(--ulm-surface-2);
+}
+
+.ulm-location-card-info {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-height: 5.5rem;
+}
+
+.ulm-location-name {
+    font-weight: 600;
+    color: var(--ulm-text);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.ulm-location-title {
+    font-size: 0.8rem;
+    color: var(--ulm-text-muted);
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.ulm-location-org {
+    font-size: 0.8rem;
+    color: var(--ulm-text-subtle);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.ulm-location-years {
+    font-size: 0.75rem;
+    color: var(--ulm-text-subtle);
+    margin-top: auto;
+}
+
+/* No results state */
+.ulm-where-no-alumni {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.ulm-where-no-alumni p {
+    color: var(--ulm-text-muted);
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ulm-location-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .ulm-location-header {
+        padding: 1rem;
+    }
+
+    .ulm-location-content.expanded {
+        padding: 1rem;
+    }
+
+    .ulm-location-photo {
+        height: 120px;
+    }
+
+    .ulm-location-card-info {
+        padding: 0.75rem;
+        min-height: 4.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ulm-location-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .ulm-location-header {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .ulm-location-content.expanded {
+        padding: 0.75rem;
+    }
+
+    .ulm-location-photo {
+        height: 100px;
+    }
+
+    .ulm-location-card-info {
+        padding: 0.5rem;
+        min-height: 4.25rem;
+    }
+
+    .ulm-location-name {
+        font-size: 0.85rem;
+    }
+}

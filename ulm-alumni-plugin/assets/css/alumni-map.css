@@ -1,0 +1,19 @@
+/* Alumni Map */
+
+.ulm-alumni-map {
+    width: 100%;
+    border: 1px solid var(--ulm-border);
+    border-radius: 16px;
+    background: var(--ulm-surface-2);
+    box-shadow: var(--ulm-shadow-1);
+    overflow: hidden;
+}
+
+.ulm-alumni-map .leaflet-control-container,
+.ulm-alumni-map .leaflet-pane {
+    font-family: var(--ulm-font-body);
+}
+
+.ulm-alumni-map .leaflet-control-attribution {
+    color: var(--ulm-text-muted);
+}

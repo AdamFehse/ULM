@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  init-perms:
+    image: wordpress:latest
+    user: "0:0"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./ulm-alumni-plugin:/var/www/html/wp-content/plugins/ulm-alumni-plugin
+      - uploads_data:/var/www/html/wp-content/uploads
+    command: sh -c "mkdir -p /var/www/html/wp-content/uploads && chown -R www-data:www-data /var/www/html/wp-content"
+
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: ulm_user
+      WORDPRESS_DB_PASSWORD: ulm_password
+      WORDPRESS_DB_NAME: ulm_wp
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./ulm-alumni-plugin:/var/www/html/wp-content/plugins/ulm-alumni-plugin
+      - uploads_data:/var/www/html/wp-content/uploads
+    depends_on:
+      - init-perms
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ulm_wp
+      MYSQL_USER: ulm_user
+      MYSQL_PASSWORD: ulm_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: ulm_user
+      PMA_PASSWORD: ulm_password
+    depends_on:
+      - mysql
+
+volumes:
+  wordpress_data:
+  mysql_data:
+  uploads_data:

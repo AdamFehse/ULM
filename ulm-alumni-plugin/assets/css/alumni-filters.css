@@ -1,0 +1,218 @@
+/* Alumni Search, Filter & Sort UI */
+
+.ulm-alumni-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--ulm-surface-gradient);
+    border: 1px solid var(--ulm-border);
+    border-radius: 16px;
+    align-items: flex-end;
+}
+
+.ulm-search,
+.ulm-filter-instrument,
+.ulm-filter-year,
+.ulm-filter-location,
+.ulm-sort {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--ulm-border-strong);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: var(--ulm-surface-1);
+    color: var(--ulm-text);
+    transition: all 0.3s ease;
+    min-width: 140px;
+}
+
+.ulm-search {
+    flex: 1 1 250px;
+    min-width: 200px;
+}
+
+.ulm-filter-instrument,
+.ulm-filter-year,
+.ulm-filter-location,
+.ulm-sort {
+    flex: 0 1 150px;
+}
+
+.ulm-search:focus,
+.ulm-filter-instrument:focus,
+.ulm-filter-year:focus,
+.ulm-filter-location:focus,
+.ulm-sort:focus {
+    outline: none;
+    border-color: var(--ulm-primary);
+    box-shadow: 0 0 0 3px rgba(var(--ulm-primary-rgb), 0.12);
+    background: var(--ulm-surface-1);
+}
+
+.ulm-search::placeholder {
+    color: var(--ulm-text-subtle);
+}
+
+.ulm-search {
+    padding: 0.75rem 1rem;
+}
+
+.ulm-filter-instrument,
+.ulm-filter-year,
+.ulm-filter-location,
+.ulm-sort {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+}
+
+.ulm-clear-filters {
+    padding: 0.75rem 1.25rem;
+    background: var(--ulm-danger);
+    color: var(--ulm-text-inverse);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+
+.ulm-clear-filters:hover {
+    background: var(--ulm-danger-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--ulm-shadow-rgb), 0.2);
+}
+
+.ulm-clear-filters:active {
+    transform: translateY(0);
+}
+
+.ulm-results-count {
+    width: 100%;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ulm-border);
+    font-size: 0.9rem;
+    color: var(--ulm-text-muted);
+    text-align: center;
+    display: none;
+}
+
+.ulm-results-count.active {
+    display: block;
+}
+
+#ulm-results-number {
+    font-weight: 600;
+    color: var(--ulm-primary);
+}
+
+/* Alumni cards with filter data attributes */
+.ulm-alumni-card {
+    transition: all 0.3s ease;
+}
+
+.ulm-alumni-card.ulm-hidden {
+    display: none;
+}
+
+.ulm-no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--ulm-text-muted);
+}
+
+.ulm-no-results-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.ulm-no-results-text {
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .ulm-search {
+        flex: 1 1 100%;
+    }
+
+    .ulm-filter-instrument,
+    .ulm-filter-year,
+    .ulm-filter-location,
+    .ulm-sort {
+        flex: 1 1 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .ulm-alumni-filters {
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .ulm-search,
+    .ulm-filter-instrument,
+    .ulm-filter-year,
+    .ulm-filter-location,
+    .ulm-sort {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.875rem;
+        flex: 1 1 45%;
+        min-width: 120px;
+    }
+
+    .ulm-clear-filters {
+        width: 100%;
+        padding: 0.65rem 0.875rem;
+        flex: 1 1 100%;
+    }
+
+    .ulm-search {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .ulm-alumni-filters {
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .ulm-search,
+    .ulm-filter-instrument,
+    .ulm-filter-year,
+    .ulm-filter-location,
+    .ulm-sort {
+        flex: 1 1 100%;
+        padding: 0.6rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .ulm-clear-filters {
+        flex: 1 1 100%;
+        padding: 0.6rem 0.75rem;
+    }
+}
+
+/* Animation for filtered items */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.ulm-alumni-card:not(.ulm-hidden) {
+    animation: fadeIn 0.3s ease-in;
+}

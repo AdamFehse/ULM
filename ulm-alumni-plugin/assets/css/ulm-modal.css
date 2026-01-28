@@ -1,0 +1,225 @@
+/**
+ * ULM Alumni Modal Styles
+ * Shared modal styles used across all shortcodes
+ */
+
+.ulm-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.ulm-modal.is-open {
+    display: flex;
+}
+
+.ulm-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--ulm-overlay);
+}
+
+.ulm-modal__content {
+    position: relative;
+    z-index: 2;
+    width: min(720px, 92vw);
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--ulm-bg);
+    border: 1px solid var(--ulm-border);
+    border-radius: var(--ulm-border-radius);
+    padding: var(--ulm-space-md);
+    box-shadow: var(--ulm-shadow-3);
+}
+
+.ulm-modal__close {
+    position: absolute;
+    top: var(--ulm-space-sm);
+    right: var(--ulm-space-sm);
+    background: transparent;
+    border: 0;
+    font-size: 24px;
+    color: var(--ulm-text);
+    cursor: pointer;
+}
+
+.ulm-modal__header {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--ulm-space-sm);
+    align-items: center;
+}
+
+.ulm-modal__photo {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--ulm-border-radius);
+    background: var(--ulm-bg-light);
+    cursor: zoom-in;
+    transition: opacity 0.2s ease;
+}
+
+.ulm-modal__photo:hover {
+    opacity: 0.9;
+}
+
+.ulm-modal__name {
+    margin: 0 0 var(--ulm-space-xs) 0;
+    font-family: var(--ulm-font-heading);
+    color: var(--ulm-primary);
+}
+
+.ulm-modal__meta {
+    color: var(--ulm-text-light);
+    font-size: var(--ulm-font-size-sm);
+}
+
+.ulm-modal__body {
+    margin-top: var(--ulm-space-sm);
+    color: var(--ulm-text);
+    line-height: var(--ulm-line-height);
+}
+
+.ulm-modal__links {
+    margin-top: var(--ulm-space-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ulm-space-xs);
+}
+
+.ulm-modal__links a {
+    color: var(--ulm-primary);
+    text-decoration: underline;
+}
+
+/* Lightbox - Full screen image viewer */
+.ulm-lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    background: var(--ulm-overlay-strong);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ulm-lightbox.is-open {
+    display: flex;
+    opacity: 1;
+}
+
+.ulm-lightbox__image {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    animation: lightboxZoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes lightboxZoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.ulm-lightbox__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--ulm-control-bg);
+    border: none;
+    color: var(--ulm-text-inverse);
+    font-size: 32px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10001;
+}
+
+.ulm-lightbox__close:hover {
+    background: var(--ulm-control-bg-hover);
+    transform: scale(1.1);
+}
+
+/* Lightbox navigation */
+.ulm-lightbox__prev,
+.ulm-lightbox__next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--ulm-control-bg);
+    border: none;
+    color: var(--ulm-text-inverse);
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10001;
+}
+
+.ulm-lightbox__prev {
+    left: 20px;
+}
+
+.ulm-lightbox__next {
+    right: 20px;
+}
+
+.ulm-lightbox__prev:hover,
+.ulm-lightbox__next:hover {
+    background: var(--ulm-control-bg-hover);
+    transform: translateY(-50%) scale(1.1);
+}
+
+@media (max-width: 640px) {
+    .ulm-modal__header {
+        grid-template-columns: 1fr;
+    }
+
+    .ulm-modal__photo {
+        height: 200px;
+    }
+
+    .ulm-lightbox__close {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
+
+    .ulm-lightbox__prev,
+    .ulm-lightbox__next {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .ulm-lightbox__prev {
+        left: 10px;
+    }
+
+    .ulm-lightbox__next {
+        right: 10px;
+    }
+}
