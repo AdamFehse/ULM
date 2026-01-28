@@ -38,6 +38,7 @@ class ULMAlumniMap {
         this.map = null;
         this.tileLayer = null;
         this.markers = [];
+        this.markerIndex = new Map();
 
         this.init();
     }
@@ -133,11 +134,68 @@ class ULMAlumniMap {
             } );
 
             if ( entry.name ) {
-                marker.bindPopup( `${entry.name}${entry.location ? ' · ' + entry.location : ''}` );
+                const title = `${entry.name}${entry.location ? ' · ' + entry.location : ''}`;
+                const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent( entry.lat + ',' + entry.lng )}`;
+                marker.bindPopup(
+                    `<div class="ulm-map-popup">
+                        <div class="ulm-map-popup__title">${title}</div>
+                        <a class="ulm-map-popup__button" href="${directionsUrl}" target="_blank" rel="noopener">Directions</a>
+                    </div>`
+                );
+            }
+
+            if ( entry.id ) {
+                this.markerIndex.set( entry.id, marker );
+                marker.on( 'mouseover', () => this.highlightScreening( entry.id, true ) );
+                marker.on( 'mouseout', () => this.highlightScreening( entry.id, false ) );
             }
 
             marker.addTo( this.map );
             this.markers.push( marker );
+        } );
+
+        if ( this.markers.length ) {
+            const bounds = window.L.latLngBounds(
+                this.markers.map( ( marker ) => marker.getLatLng() )
+            );
+            this.map.fitBounds( bounds, { padding: [ 10, 10 ] } );
+        }
+
+        this.bindCardHover();
+    }
+
+    highlightScreening( screeningId, isActive ) {
+        const card = document.querySelector( `.ulm-screening-card[data-screening-id="${screeningId}"]` );
+        if ( ! card ) {
+            return;
+        }
+        card.classList.toggle( 'is-highlighted', Boolean( isActive ) );
+    }
+
+    highlightMarker( screeningId, isActive ) {
+        const marker = this.markerIndex.get( Number( screeningId ) ) || this.markerIndex.get( screeningId );
+        if ( ! marker ) {
+            return;
+        }
+        const highlightColor = this.getThemeColor( '--ulm-secondary', this.options.markerColor );
+        marker.setStyle( {
+            radius: isActive ? 13 : 6,
+            weight: isActive ? 3 : 1,
+            color: isActive ? highlightColor : this.options.markerColor,
+            fillColor: isActive ? highlightColor : this.options.markerColor,
+            fillOpacity: isActive ? 0.9 : 0.7,
+        } );
+        if ( isActive ) {
+            marker.bringToFront();
+        }
+    }
+
+    bindCardHover() {
+        const cards = document.querySelectorAll( '.ulm-screening-card[data-screening-id]' );
+        cards.forEach( ( card ) => {
+            const screeningId = card.getAttribute( 'data-screening-id' );
+            card.addEventListener( 'mouseenter', () => this.highlightMarker( screeningId, true ) );
+            card.addEventListener( 'mouseleave', () => this.highlightMarker( screeningId, false ) );
         } );
     }
 
@@ -178,5 +236,9 @@ window.ULMAlumniMap = ULMAlumniMap;
 document.addEventListener( 'DOMContentLoaded', () => {
     if ( document.querySelector( '#ulm-alumni-map' ) ) {
         window.ULMAlumniMapInstance = new ULMAlumniMap( '#ulm-alumni-map' );
+
+        if ( Array.isArray( window.ULMScreeningsMapData ) ) {
+            window.ULMAlumniMapInstance.setAlumniData( window.ULMScreeningsMapData );
+        }
     }
 } );

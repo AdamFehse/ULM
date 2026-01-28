@@ -1,21 +1,90 @@
-/* Community Screenings Placeholder */
+/* Community Screenings */
 
-.ulm-screenings-placeholder {
-    padding: 3rem 1rem;
-    text-align: center;
-    color: var(--ulm-text-muted);
-    border: 2px dashed var(--ulm-border-strong);
-    border-radius: 12px;
-    background: var(--ulm-surface-3);
-    margin: 2rem 0;
+.ulm-screenings {
+    display: grid;
+    gap: 2rem;
+    margin: var(--ulm-space-md) 0 var(--ulm-space-lg);
 }
 
-.ulm-screenings-placeholder p {
-    margin: 0.5rem 0;
-    font-size: 1rem;
+.ulm-section-header {
+    text-align: left;
+    margin: var(--ulm-space-md) 0 var(--ulm-space-sm);
 }
 
-.ulm-screenings-placeholder p:first-child {
-    font-weight: 600;
+.ulm-section-header h2 {
+    margin: 0 0 0.5rem;
+    font-family: var(--ulm-font-heading);
     color: var(--ulm-text);
+}
+
+.ulm-section-header p {
+    margin: 0;
+    color: var(--ulm-text-muted);
+}
+
+.ulm-screenings-section h3 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    color: var(--ulm-text);
+}
+
+.ulm-screenings-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.ulm-screening-card {
+    background: var(--ulm-surface-1);
+    border: 1px solid var(--ulm-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: var(--ulm-shadow-1);
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ulm-screening-card.is-highlighted {
+    background: var(--ulm-surface-2);
+    border-color: var(--ulm-primary);
+    box-shadow: var(--ulm-shadow-2);
+    transform: translateY(-2px);
+}
+
+.ulm-screening-date {
+    font-size: 0.85rem;
+    color: var(--ulm-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.ulm-screening-title {
+    margin: 0.4rem 0 0.5rem;
+    font-size: 1.1rem;
+    color: var(--ulm-text);
+}
+
+.ulm-screening-meta {
+    font-size: 0.9rem;
+    color: var(--ulm-text-muted);
+}
+
+.ulm-screening-description {
+    margin: 0.75rem 0 0;
+    color: var(--ulm-text-light);
+    line-height: 1.6;
+}
+
+.ulm-screening-related {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--ulm-text-muted);
+}
+
+.ulm-screening-related span {
+    color: var(--ulm-text);
+    font-weight: 600;
+}
+
+.ulm-screenings-empty {
+    color: var(--ulm-text-muted);
+    margin: 0;
 }

@@ -4,6 +4,12 @@
 <?php
 $stats = ULM_Alumni_Stats::get_all_stats();
 ?>
+<div class="ulm-container">
+    <div class="ulm-section-header">
+        <h2><?php esc_html_e( 'Alumni Directory', 'ulm-alumni' ); ?></h2>
+        <p><?php esc_html_e( 'Browse and filter alumni profiles.', 'ulm-alumni' ); ?></p>
+    </div>
+</div>
 <div class="ulm-alumni-stats">
     <!-- Total Alumni -->
     <div class="ulm-stat-card total">

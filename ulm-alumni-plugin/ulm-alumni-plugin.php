@@ -25,6 +25,7 @@ require_once ULM_PLUGIN_DIR . 'includes/class-members-area.php';
 require_once ULM_PLUGIN_DIR . 'includes/class-memory-form.php';
 require_once ULM_PLUGIN_DIR . 'includes/class-carbon-fields.php';
 require_once ULM_PLUGIN_DIR . 'includes/class-timeline.php';
+require_once ULM_PLUGIN_DIR . 'includes/class-screenings.php';
 
 // Load Carbon Fields if available (from Composer vendor or bundled)
 if ( file_exists( ULM_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
@@ -45,5 +46,8 @@ function ulm_init() {
     new ULM_Members_Area();
     new ULM_Memory_Form();
     new ULM_Carbon_Fields();
+
+    add_action( 'init', array( 'ULM_Screenings', 'register_post_type' ) );
+    add_action( 'save_post_ulm_screening', array( 'ULM_Screenings', 'maybe_geocode_screening' ), 20, 3 );
 }
 add_action( 'plugins_loaded', 'ulm_init' );

@@ -31,6 +31,10 @@
 <?php endif; ?>
 
 <div class="ulm-container">
+    <div class="ulm-section-header">
+        <h2><?php esc_html_e( 'Where Are They Now', 'ulm-alumni' ); ?></h2>
+        <p><?php esc_html_e( 'Alumni grouped by location.', 'ulm-alumni' ); ?></p>
+    </div>
     <div class="ulm-where-are-they-now">
         <?php
         // Get all alumni with locations

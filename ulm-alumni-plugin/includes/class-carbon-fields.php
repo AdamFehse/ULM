@@ -11,8 +11,12 @@ class ULM_Carbon_Fields {
 		add_action( 'admin_head', array( $this, 'hide_title_ui' ) );
 		add_action( 'admin_menu', array( $this, 'remove_taxonomy_metaboxes' ) );
 		add_action( 'carbon_fields_register_fields', array( $this, 'register_fields' ) );
-		add_action( 'save_post_ulm_alumni', array( $this, 'sync_alumni_title' ), 20 );
-		add_action( 'save_post_ulm_timeline', array( $this, 'sync_event_title' ), 20 );
+		add_action( 'save_post_ulm_alumni', array( $this, 'sync_alumni_title' ), 30 );
+		add_action( 'save_post_ulm_timeline', array( $this, 'sync_event_title' ), 30 );
+		add_action( 'save_post_ulm_screening', array( $this, 'sync_screening_title' ), 30 );
+		add_action( 'carbon_fields_post_meta_container_saved', array( $this, 'sync_alumni_title_after_fields' ), 20, 2 );
+		add_action( 'carbon_fields_post_meta_container_saved', array( $this, 'sync_event_title_after_fields' ), 20, 2 );
+		add_action( 'carbon_fields_post_meta_container_saved', array( $this, 'sync_screening_title_after_fields' ), 20, 2 );
 		add_filter( 'enter_title_here', array( $this, 'title_placeholder' ), 10, 2 );
 	}
 
@@ -22,6 +26,9 @@ class ULM_Carbon_Fields {
 		}
 		if ( $post->post_type === 'ulm_timeline' ) {
 			return 'Event title';
+		}
+		if ( $post->post_type === 'ulm_screening' ) {
+			return 'Screening title';
 		}
 		return $title;
 	}
@@ -35,6 +42,10 @@ class ULM_Carbon_Fields {
 			remove_post_type_support( 'ulm_timeline', 'editor' );
 			remove_post_type_support( 'ulm_timeline', 'title' );
 		}
+		if ( post_type_exists( 'ulm_screening' ) ) {
+			remove_post_type_support( 'ulm_screening', 'editor' );
+			remove_post_type_support( 'ulm_screening', 'title' );
+		}
 	}
 
 	public function hide_title_ui() {
@@ -42,7 +53,7 @@ class ULM_Carbon_Fields {
 		if ( ! $screen ) {
 			return;
 		}
-		if ( $screen->post_type === 'ulm_alumni' || $screen->post_type === 'ulm_timeline' ) {
+		if ( $screen->post_type === 'ulm_alumni' || $screen->post_type === 'ulm_timeline' || $screen->post_type === 'ulm_screening' ) {
 			echo '<style>#titlediv{display:none !important;}</style>';
 		}
 	}
@@ -129,9 +140,93 @@ class ULM_Carbon_Fields {
 		delete_post_meta( $post_id, '_ulm_event_title_synced' );
 	}
 
+	public function sync_alumni_title_after_fields( $post_id, $container ) {
+		if ( get_post_type( $post_id ) !== 'ulm_alumni' ) {
+			return;
+		}
+
+		if ( ! is_object( $container ) || ! method_exists( $container, 'get_title' ) ) {
+			return;
+		}
+
+		if ( $container->get_title() !== 'Alumni Details' ) {
+			return;
+		}
+
+		$this->sync_alumni_title( $post_id );
+	}
+
+	public function sync_event_title_after_fields( $post_id, $container ) {
+		if ( get_post_type( $post_id ) !== 'ulm_timeline' ) {
+			return;
+		}
+
+		if ( ! is_object( $container ) || ! method_exists( $container, 'get_title' ) ) {
+			return;
+		}
+
+		if ( $container->get_title() !== 'Timeline Event Details' ) {
+			return;
+		}
+
+		$this->sync_event_title( $post_id );
+	}
+
+	public function sync_screening_title( $post_id ) {
+		if ( get_post_type( $post_id ) !== 'ulm_screening' ) {
+			return;
+		}
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( get_post_meta( $post_id, '_ulm_screening_title_synced', true ) ) {
+			return;
+		}
+
+		$title = carbon_get_post_meta( $post_id, 'screening_title' );
+		if ( ! $title ) {
+			return;
+		}
+
+		update_post_meta( $post_id, '_ulm_screening_title_synced', true );
+
+		$post_data = array(
+			'ID' => $post_id,
+			'post_title' => $title,
+		);
+
+		$post = get_post( $post_id );
+		if ( $post && $post->post_name === '' ) {
+			$post_data['post_name'] = sanitize_title( $title );
+		}
+
+		wp_update_post( $post_data );
+
+		delete_post_meta( $post_id, '_ulm_screening_title_synced' );
+	}
+
+	public function sync_screening_title_after_fields( $post_id, $container ) {
+		if ( get_post_type( $post_id ) !== 'ulm_screening' ) {
+			return;
+		}
+
+		if ( ! is_object( $container ) || ! method_exists( $container, 'get_title' ) ) {
+			return;
+		}
+
+		if ( $container->get_title() !== 'Screening Details' ) {
+			return;
+		}
+
+		$this->sync_screening_title( $post_id );
+	}
+
 	public function register_fields() {
 		$this->register_alumni_fields();
 		$this->register_timeline_fields();
+		$this->register_screening_fields();
 	}
 
 	private function register_alumni_fields() {
@@ -197,6 +292,42 @@ class ULM_Carbon_Fields {
 							'type' => 'post',
 							'post_type' => 'ulm_alumni',
 						),
+					) ),
+			) );
+	}
+
+	private function register_screening_fields() {
+		Container::make( 'post_meta', 'Screening Details' )
+			->where( 'post_type', '=', 'ulm_screening' )
+			->add_tab( __( 'Basics', 'ulm-alumni' ), array(
+				Field::make( 'text', 'screening_title', __( 'Screening Title', 'ulm-alumni' ) )
+					->set_required( true ),
+				Field::make( 'date', 'screening_date', __( 'Screening Date', 'ulm-alumni' ) )
+					->set_storage_format( 'Y-m-d' ),
+				Field::make( 'text', 'screening_location', __( 'Location', 'ulm-alumni' ) )
+					->set_help_text( __( 'Format: City, State', 'ulm-alumni' ) ),
+				Field::make( 'text', 'screening_venue', __( 'Venue', 'ulm-alumni' ) ),
+				Field::make( 'textarea', 'screening_description', __( 'Description', 'ulm-alumni' ) )
+					->set_rows( 4 ),
+			) )
+			->add_tab( __( 'Related Alumni', 'ulm-alumni' ), array(
+				Field::make( 'association', 'screening_related_alumni', __( 'Related Alumni', 'ulm-alumni' ) )
+					->set_types( array(
+						array(
+							'type' => 'post',
+							'post_type' => 'ulm_alumni',
+						),
+					) ),
+			) )
+			->add_tab( __( 'Media', 'ulm-alumni' ), array(
+				Field::make( 'complex', 'screening_media', __( 'Screening Media', 'ulm-alumni' ) )
+					->set_layout( 'tabbed-horizontal' )
+					->set_help_text( __( 'Add posters, programs, or photos.', 'ulm-alumni' ) )
+					->add_fields( array(
+						Field::make( 'file', 'file', __( 'Media File', 'ulm-alumni' ) )
+							->set_type( array( 'image', 'application' ) )
+							->set_value_type( 'url' ),
+						Field::make( 'text', 'caption', __( 'Caption', 'ulm-alumni' ) ),
 					) ),
 			) );
 	}

@@ -4,6 +4,24 @@
     padding: 0 1rem;
 }
 
+.ulm-section-header {
+    text-align: left;
+    margin: var(--ulm-space-md) 0 var(--ulm-space-sm);
+}
+
+.ulm-section-header h2 {
+    margin: 0 0 var(--ulm-section-title-spacing);
+    font-family: var(--ulm-font-heading);
+    font-size: var(--ulm-section-title-size);
+    color: var(--ulm-text);
+}
+
+.ulm-section-header p {
+    margin: 0;
+    font-size: var(--ulm-section-subtitle-size);
+    color: var(--ulm-text-muted);
+}
+
 .ulm-location-section {
     margin-bottom: 1rem;
     border: 1px solid var(--ulm-border);

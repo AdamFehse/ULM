@@ -31,6 +31,10 @@
 <?php endif; ?>
 
 <div class="ulm-container">
+    <div class="ulm-section-header">
+        <h2><?php esc_html_e( 'Timeline', 'ulm-alumni' ); ?></h2>
+        <p><?php esc_html_e( 'Key moments and related alumni.', 'ulm-alumni' ); ?></p>
+    </div>
     <div class="ulm-timeline">
         <?php if ( ! empty( $events ) ) : ?>
             <?php foreach ( $events as $event ) : setup_postdata( $event ); ?>

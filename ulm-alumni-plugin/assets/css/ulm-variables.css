@@ -69,6 +69,11 @@
     --ulm-stat-instruments: #ec4899;
     --ulm-stat-decades: #06b6d4;
     --ulm-stat-locations: #f59e0b;
+
+    /* Section headings */
+    --ulm-section-title-size: 1.4rem;
+    --ulm-section-title-spacing: 0.5rem;
+    --ulm-section-subtitle-size: 0.95rem;
 }
 
 /* Dark Mode - System Preference Detection */
