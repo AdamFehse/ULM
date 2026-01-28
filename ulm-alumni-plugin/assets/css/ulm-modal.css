@@ -96,6 +96,26 @@
     text-decoration: underline;
 }
 
+.ulm-modal__links--buttons a {
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    background: var(--ulm-primary);
+    color: var(--ulm-text-inverse);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: var(--ulm-shadow-1);
+}
+
+.ulm-modal__links--buttons a:nth-child(2) {
+    background: var(--ulm-secondary);
+    color: var(--ulm-text-inverse);
+}
+
+.ulm-modal__links--buttons a:hover {
+    opacity: 0.9;
+}
+
 /* Lightbox - Full screen image viewer */
 .ulm-lightbox {
     position: fixed;

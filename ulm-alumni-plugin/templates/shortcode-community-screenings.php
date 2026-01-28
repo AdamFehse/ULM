@@ -71,10 +71,29 @@ usort( $past, function( $a, $b ) {
 
 <div class="ulm-container">
     <div class="ulm-screenings">
-    <div class="ulm-section-header">
-        <h2><?php esc_html_e( 'Community Screenings', 'ulm-alumni' ); ?></h2>
-        <p><?php esc_html_e( 'Upcoming and past events from the ULM community.', 'ulm-alumni' ); ?></p>
-    </div>
+        <div class="ulm-section-header">
+            <h2><?php esc_html_e( 'Community Screenings', 'ulm-alumni' ); ?></h2>
+            <p><?php esc_html_e( 'Upcoming and past events from the ULM community.', 'ulm-alumni' ); ?></p>
+        </div>
+
+        <?php if ( empty( $GLOBALS['ulm_screening_modal_rendered'] ) ) : ?>
+            <?php $GLOBALS['ulm_screening_modal_rendered'] = true; ?>
+            <div class="ulm-modal" id="ulm-screening-modal" aria-hidden="true">
+                <div class="ulm-modal__backdrop" data-ulm-screening-close></div>
+                <div class="ulm-modal__content" role="dialog" aria-modal="true" aria-labelledby="ulm-screening-modal-title">
+                    <button class="ulm-modal__close" type="button" aria-label="Close" data-ulm-screening-close>&times;</button>
+                    <div class="ulm-modal__header">
+                        <img class="ulm-modal__photo" src="" alt="" />
+                        <div>
+                            <h3 class="ulm-modal__name" id="ulm-screening-modal-title"></h3>
+                            <div class="ulm-modal__meta"></div>
+                        </div>
+                    </div>
+                    <div class="ulm-modal__body"></div>
+                    <div class="ulm-modal__links ulm-modal__links--buttons"></div>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <div
             id="ulm-alumni-map"
@@ -96,9 +115,39 @@ usort( $past, function( $a, $b ) {
                         $location = ulm_get_field( 'screening_location', $screening->ID );
                         $venue = ulm_get_field( 'screening_venue', $screening->ID );
                         $description = ulm_get_field( 'screening_description', $screening->ID );
+                        $tickets_url = ulm_get_field( 'screening_tickets_url', $screening->ID );
                         $related_ids = ulm_get_field_array( 'screening_related_alumni', $screening->ID );
+                        $photo = get_the_post_thumbnail_url( $screening->ID, 'medium' );
+                        $media_gallery = ulm_get_field_array( 'screening_media', $screening->ID );
+                        $media_items = array();
+                        if ( ! empty( $media_gallery ) && is_array( $media_gallery ) ) {
+                            foreach ( $media_gallery as $item ) {
+                                if ( ! empty( $item['file'] ) ) {
+                                    $media_items[] = array(
+                                        'url' => $item['file'],
+                                        'caption' => $item['caption'] ? $item['caption'] : basename( $item['file'] ),
+                                    );
+                                }
+                            }
+                        }
+
+                        $payload = array(
+                            'id' => $screening->ID,
+                            'title' => $title ? $title : get_the_title( $screening ),
+                            'date' => $date,
+                            'dateDisplay' => $date ? date_i18n( 'F j, Y', strtotime( $date ) ) : '',
+                            'location' => $location,
+                            'venue' => $venue,
+                            'description' => $description,
+                            'photo' => $photo,
+                            'mediaItems' => $media_items,
+                            'ticketsUrl' => $tickets_url,
+                            'lat' => $lat,
+                            'lng' => $lng,
+                        );
                         ?>
-                        <article class="ulm-screening-card" data-screening-id="<?php echo esc_attr( $screening->ID ); ?>">
+                        <article class="ulm-screening-card js-ulm-screening-trigger" role="button" tabindex="0" aria-label="<?php echo esc_attr( 'View screening: ' . ( $title ? $title : get_the_title( $screening ) ) ); ?>" data-screening-id="<?php echo esc_attr( $screening->ID ); ?>"
+                            data-screening="<?php echo esc_attr( wp_json_encode( $payload, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP ) ); ?>">
                             <div class="ulm-screening-date">
                                 <?php echo esc_html( $date ? date_i18n( 'F j, Y', strtotime( $date ) ) : '' ); ?>
                             </div>
@@ -136,8 +185,38 @@ usort( $past, function( $a, $b ) {
                         $location = ulm_get_field( 'screening_location', $screening->ID );
                         $venue = ulm_get_field( 'screening_venue', $screening->ID );
                         $description = ulm_get_field( 'screening_description', $screening->ID );
+                        $tickets_url = ulm_get_field( 'screening_tickets_url', $screening->ID );
+                        $photo = get_the_post_thumbnail_url( $screening->ID, 'medium' );
+                        $media_gallery = ulm_get_field_array( 'screening_media', $screening->ID );
+                        $media_items = array();
+                        if ( ! empty( $media_gallery ) && is_array( $media_gallery ) ) {
+                            foreach ( $media_gallery as $item ) {
+                                if ( ! empty( $item['file'] ) ) {
+                                    $media_items[] = array(
+                                        'url' => $item['file'],
+                                        'caption' => $item['caption'] ? $item['caption'] : basename( $item['file'] ),
+                                    );
+                                }
+                            }
+                        }
+
+                        $payload = array(
+                            'id' => $screening->ID,
+                            'title' => $title ? $title : get_the_title( $screening ),
+                            'date' => $date,
+                            'dateDisplay' => $date ? date_i18n( 'F j, Y', strtotime( $date ) ) : '',
+                            'location' => $location,
+                            'venue' => $venue,
+                            'description' => $description,
+                            'photo' => $photo,
+                            'mediaItems' => $media_items,
+                            'ticketsUrl' => $tickets_url,
+                            'lat' => $lat,
+                            'lng' => $lng,
+                        );
                         ?>
-                        <article class="ulm-screening-card" data-screening-id="<?php echo esc_attr( $screening->ID ); ?>">
+                        <article class="ulm-screening-card js-ulm-screening-trigger" role="button" tabindex="0" aria-label="<?php echo esc_attr( 'View screening: ' . ( $title ? $title : get_the_title( $screening ) ) ); ?>" data-screening-id="<?php echo esc_attr( $screening->ID ); ?>"
+                            data-screening="<?php echo esc_attr( wp_json_encode( $payload, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP ) ); ?>">
                             <div class="ulm-screening-date">
                                 <?php echo esc_html( $date ? date_i18n( 'F j, Y', strtotime( $date ) ) : '' ); ?>
                             </div>
@@ -168,8 +247,36 @@ usort( $past, function( $a, $b ) {
                         $location = ulm_get_field( 'screening_location', $screening->ID );
                         $venue = ulm_get_field( 'screening_venue', $screening->ID );
                         $description = ulm_get_field( 'screening_description', $screening->ID );
+                        $tickets_url = ulm_get_field( 'screening_tickets_url', $screening->ID );
+                        $photo = get_the_post_thumbnail_url( $screening->ID, 'medium' );
+                        $media_gallery = ulm_get_field_array( 'screening_media', $screening->ID );
+                        $media_items = array();
+                        if ( ! empty( $media_gallery ) && is_array( $media_gallery ) ) {
+                            foreach ( $media_gallery as $item ) {
+                                if ( ! empty( $item['file'] ) ) {
+                                    $media_items[] = array(
+                                        'url' => $item['file'],
+                                        'caption' => $item['caption'] ? $item['caption'] : basename( $item['file'] ),
+                                    );
+                                }
+                            }
+                        }
+
+                        $payload = array(
+                            'id' => $screening->ID,
+                            'title' => $title ? $title : get_the_title( $screening ),
+                            'location' => $location,
+                            'venue' => $venue,
+                            'description' => $description,
+                            'photo' => $photo,
+                            'mediaItems' => $media_items,
+                            'ticketsUrl' => $tickets_url,
+                            'lat' => $lat,
+                            'lng' => $lng,
+                        );
                         ?>
-                        <article class="ulm-screening-card" data-screening-id="<?php echo esc_attr( $screening->ID ); ?>">
+                        <article class="ulm-screening-card js-ulm-screening-trigger" role="button" tabindex="0" aria-label="<?php echo esc_attr( 'View screening: ' . ( $title ? $title : get_the_title( $screening ) ) ); ?>" data-screening-id="<?php echo esc_attr( $screening->ID ); ?>"
+                            data-screening="<?php echo esc_attr( wp_json_encode( $payload, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP ) ); ?>">
                             <h4 class="ulm-screening-title"><?php echo esc_html( $title ? $title : get_the_title( $screening ) ); ?></h4>
                             <?php if ( $venue || $location ) : ?>
                                 <div class="ulm-screening-meta">

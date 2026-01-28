@@ -135,11 +135,9 @@ class ULMAlumniMap {
 
             if ( entry.name ) {
                 const title = `${entry.name}${entry.location ? ' · ' + entry.location : ''}`;
-                const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent( entry.lat + ',' + entry.lng )}`;
                 marker.bindPopup(
                     `<div class="ulm-map-popup">
                         <div class="ulm-map-popup__title">${title}</div>
-                        <a class="ulm-map-popup__button" href="${directionsUrl}" target="_blank" rel="noopener">Directions</a>
                     </div>`
                 );
             }
@@ -148,6 +146,7 @@ class ULMAlumniMap {
                 this.markerIndex.set( entry.id, marker );
                 marker.on( 'mouseover', () => this.highlightScreening( entry.id, true ) );
                 marker.on( 'mouseout', () => this.highlightScreening( entry.id, false ) );
+                marker.on( 'click', () => this.openScreeningFromMarker( entry.id ) );
             }
 
             marker.addTo( this.map );
@@ -190,6 +189,15 @@ class ULMAlumniMap {
         }
     }
 
+    focusOnScreening( screeningId ) {
+        const marker = this.markerIndex.get( Number( screeningId ) ) || this.markerIndex.get( screeningId );
+        if ( ! marker ) {
+            return;
+        }
+        marker.openPopup();
+        this.map.setView( marker.getLatLng(), Math.max( this.map.getZoom(), 8 ), { animate: true } );
+    }
+
     bindCardHover() {
         const cards = document.querySelectorAll( '.ulm-screening-card[data-screening-id]' );
         cards.forEach( ( card ) => {
@@ -197,6 +205,23 @@ class ULMAlumniMap {
             card.addEventListener( 'mouseenter', () => this.highlightMarker( screeningId, true ) );
             card.addEventListener( 'mouseleave', () => this.highlightMarker( screeningId, false ) );
         } );
+    }
+
+    openScreeningFromMarker( screeningId ) {
+        const card = document.querySelector( `.js-ulm-screening-trigger[data-screening-id="${screeningId}"]` );
+        if ( ! card ) {
+            return;
+        }
+        const payload = card.getAttribute( 'data-screening' );
+        if ( payload && window.ULMOpenScreeningModal ) {
+            try {
+                window.ULMOpenScreeningModal( JSON.parse( payload ) );
+            } catch ( err ) {
+                card.click();
+            }
+        } else {
+            card.click();
+        }
     }
 
     /**

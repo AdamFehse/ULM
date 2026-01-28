@@ -7,27 +7,27 @@
     color-scheme: light dark;
 
     /* Colors - Light Mode */
-    --ulm-primary: #2c5aa0;
+    --ulm-primary: var(--e-global-color-primary, var(--wp--preset--color--primary, #2c5aa0));
     --ulm-primary-rgb: 44, 90, 160;
-    --ulm-secondary: #d4a574;
-    --ulm-accent: #8b4513;
+    --ulm-secondary: var(--e-global-color-secondary, var(--wp--preset--color--secondary, #d4a574));
+    --ulm-accent: var(--e-global-color-accent, var(--wp--preset--color--tertiary, #8b4513));
     --ulm-danger: #ef4444;
     --ulm-danger-hover: #dc2626;
 
-    --ulm-text: #1f2937;
-    --ulm-text-light: #4b5563;
-    --ulm-text-muted: #6b7280;
-    --ulm-text-subtle: #9ca3af;
-    --ulm-text-inverse: #ffffff;
+    --ulm-text: var(--e-global-color-text, var(--wp--preset--color--foreground, #1f2937));
+    --ulm-text-light: var(--e-global-color-text, #4b5563);
+    --ulm-text-muted: var(--e-global-color-text, #6b7280);
+    --ulm-text-subtle: var(--e-global-color-text, #9ca3af);
+    --ulm-text-inverse: var(--e-global-color-inverse, #ffffff);
 
-    --ulm-bg: #ffffff;
-    --ulm-bg-light: #f5f5f5;
-    --ulm-surface-1: #ffffff;
-    --ulm-surface-2: #f3f4f6;
-    --ulm-surface-3: #f9fafb;
+    --ulm-bg: var(--e-global-color-background, var(--wp--preset--color--background, #ffffff));
+    --ulm-bg-light: var(--e-global-color-background, #f5f5f5);
+    --ulm-surface-1: var(--e-global-color-background, #ffffff);
+    --ulm-surface-2: var(--e-global-color-background, #f3f4f6);
+    --ulm-surface-3: var(--e-global-color-background, #f9fafb);
 
-    --ulm-border: #e5e7eb;
-    --ulm-border-strong: #d1d5db;
+    --ulm-border: var(--e-global-color-border, var(--wp--preset--color--contrast-3, #e5e7eb));
+    --ulm-border-strong: var(--e-global-color-border, #d1d5db);
 
     --ulm-shadow-rgb: 0, 0, 0;
     --ulm-shadow-1: 0 2px 8px rgba(var(--ulm-shadow-rgb), 0.08);
@@ -79,27 +79,27 @@
 /* Dark Mode - System Preference Detection */
 @media (prefers-color-scheme: dark) {
     :root {
-        --ulm-primary: #5a8dd4;
+        --ulm-primary: var(--e-global-color-primary, var(--wp--preset--color--primary, #5a8dd4));
         --ulm-primary-rgb: 90, 141, 212;
-        --ulm-secondary: #e5c294;
-        --ulm-accent: #b8733f;
+        --ulm-secondary: var(--e-global-color-secondary, var(--wp--preset--color--secondary, #e5c294));
+        --ulm-accent: var(--e-global-color-accent, var(--wp--preset--color--tertiary, #b8733f));
         --ulm-danger: #f87171;
         --ulm-danger-hover: #ef4444;
 
-        --ulm-text: #e5e7eb;
-        --ulm-text-light: #cbd5e1;
-        --ulm-text-muted: #9ca3af;
-        --ulm-text-subtle: #6b7280;
-        --ulm-text-inverse: #0b0f1a;
+        --ulm-text: var(--e-global-color-text, var(--wp--preset--color--foreground, #e5e7eb));
+        --ulm-text-light: var(--e-global-color-text, #cbd5e1);
+        --ulm-text-muted: var(--e-global-color-text, #9ca3af);
+        --ulm-text-subtle: var(--e-global-color-text, #6b7280);
+        --ulm-text-inverse: var(--e-global-color-inverse, #0b0f1a);
 
-        --ulm-bg: #111318;
-        --ulm-bg-light: #1f232b;
-        --ulm-surface-1: #161a21;
-        --ulm-surface-2: #1e2430;
-        --ulm-surface-3: #232a38;
+        --ulm-bg: var(--e-global-color-background, var(--wp--preset--color--background, #111318));
+        --ulm-bg-light: var(--e-global-color-background, #1f232b);
+        --ulm-surface-1: var(--e-global-color-background, #161a21);
+        --ulm-surface-2: var(--e-global-color-background, #1e2430);
+        --ulm-surface-3: var(--e-global-color-background, #232a38);
 
-        --ulm-border: #2f3848;
-        --ulm-border-strong: #3a4559;
+        --ulm-border: var(--e-global-color-border, var(--wp--preset--color--contrast-3, #2f3848));
+        --ulm-border-strong: var(--e-global-color-border, #3a4559);
 
         --ulm-shadow-rgb: 0, 0, 0;
         --ulm-shadow-1: 0 2px 8px rgba(var(--ulm-shadow-rgb), 0.35);

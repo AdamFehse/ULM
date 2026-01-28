@@ -5,8 +5,6 @@
 
 (function () {
     var eventsInitialized = false;
-    var currentPhotoIndex = 0;
-    var currentAlumniPhotos = [];
 
     function qs(selector, scope) {
         return (scope || document).querySelector(selector);
@@ -38,31 +36,12 @@
                 photo.src = payload.photo;
                 photo.alt = safeText(payload.name);
                 photo.style.display = '';
-                photo.style.cursor = 'zoom-in';
+                photo.style.cursor = 'default';
             } else {
                 photo.src = '';
                 photo.alt = '';
                 photo.style.display = 'none';
             }
-        }
-
-        // Store all visible photos for lightbox navigation
-        var allPhotos = qsa('.js-ulm-alumni-trigger');
-        currentAlumniPhotos = [];
-        var currentPhotoFound = false;
-        var currentIndex = 0;
-        allPhotos.forEach(function(card, idx) {
-            var cardPayload = parsePayload(card);
-            if (cardPayload && cardPayload.photo) {
-                currentAlumniPhotos.push(cardPayload.photo);
-                if (cardPayload.photo === payload.photo) {
-                    currentIndex = currentAlumniPhotos.length - 1;
-                    currentPhotoFound = true;
-                }
-            }
-        });
-        if (currentPhotoFound) {
-            currentPhotoIndex = currentIndex;
         }
 
         if (name) name.textContent = safeText(payload.name);
@@ -119,6 +98,93 @@
         }
     }
 
+    function openScreeningModal(payload) {
+        var modal = qs('#ulm-screening-modal');
+        if (!modal) {
+            return;
+        }
+
+        var photo = qs('.ulm-modal__photo', modal);
+        var title = qs('.ulm-modal__name', modal);
+        var meta = qs('.ulm-modal__meta', modal);
+        var body = qs('.ulm-modal__body', modal);
+        var links = qs('.ulm-modal__links', modal);
+
+        if (photo) {
+            if (payload.photo) {
+                photo.src = payload.photo;
+                photo.alt = safeText(payload.title);
+                photo.style.display = '';
+            } else {
+                photo.src = '';
+                photo.alt = '';
+                photo.style.display = 'none';
+            }
+        }
+
+        if (title) title.textContent = safeText(payload.title);
+
+        var metaParts = [];
+        if (payload.dateDisplay || payload.date) metaParts.push(payload.dateDisplay || payload.date);
+        if (payload.venue) metaParts.push(payload.venue);
+        if (payload.location) metaParts.push(payload.location);
+        if (meta) meta.textContent = metaParts.join(' · ');
+
+        if (body) {
+            body.textContent = safeText(payload.description);
+        }
+
+        if (links) {
+            links.innerHTML = '';
+
+            var destination = payload.lat && payload.lng
+                ? payload.lat + ',' + payload.lng
+                : safeText(payload.location);
+            if (destination) {
+                var directions = document.createElement('a');
+                directions.href = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(destination);
+                directions.target = '_blank';
+                directions.rel = 'noopener noreferrer';
+                directions.textContent = 'Get Directions';
+                links.appendChild(directions);
+            }
+
+            if (payload.ticketsUrl) {
+                var tickets = document.createElement('a');
+                tickets.href = payload.ticketsUrl;
+                tickets.target = '_blank';
+                tickets.rel = 'noopener noreferrer';
+                tickets.textContent = 'Get Tickets';
+                links.appendChild(tickets);
+            }
+
+            if (payload.mediaItems && payload.mediaItems.length > 0) {
+                payload.mediaItems.forEach(function(item) {
+                    var media = document.createElement('a');
+                    media.href = item.url;
+                    media.target = '_blank';
+                    media.rel = 'noopener noreferrer';
+                    media.textContent = item.caption || 'Media';
+                    links.appendChild(media);
+                });
+            }
+
+            if (!links.childNodes.length) {
+                links.style.display = 'none';
+            } else {
+                links.style.display = '';
+            }
+        }
+
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        if (window.ULMAlumniMapInstance && typeof window.ULMAlumniMapInstance.focusOnScreening === 'function' && payload.id) {
+            window.ULMAlumniMapInstance.focusOnScreening(payload.id);
+        }
+    }
+
     function closeModal() {
         var modal = qs('#ulm-alumni-modal');
         if (!modal) return;
@@ -127,52 +193,27 @@
         document.body.style.overflow = '';
     }
 
-    function openLightbox(imageUrl, index) {
-        var lightbox = qs('#ulm-lightbox');
-        if (!lightbox) {
-            console.warn('[ULM] Lightbox element not found in DOM');
-            return;
-        }
-
-        var img = qs('.ulm-lightbox__image', lightbox);
-        if (img) {
-            img.src = imageUrl;
-            img.alt = 'Enlarged alumni photo';
-        }
-
-        currentPhotoIndex = index;
-        lightbox.classList.add('is-open');
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-        var lightbox = qs('#ulm-lightbox');
-        if (!lightbox) return;
-        lightbox.classList.remove('is-open');
-        lightbox.setAttribute('aria-hidden', 'true');
+    function closeScreeningModal() {
+        var modal = qs('#ulm-screening-modal');
+        if (!modal) return;
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
     }
 
-    function showLightboxImage(index) {
-        if (index < 0 || index >= currentAlumniPhotos.length) {
-            return;
-        }
-        openLightbox(currentAlumniPhotos[index], index);
-    }
-
-    function nextLightboxImage() {
-        var nextIndex = (currentPhotoIndex + 1) % currentAlumniPhotos.length;
-        showLightboxImage(nextIndex);
-    }
-
-    function prevLightboxImage() {
-        var prevIndex = currentPhotoIndex === 0 ? currentAlumniPhotos.length - 1 : currentPhotoIndex - 1;
-        showLightboxImage(prevIndex);
-    }
 
     function parsePayload(el) {
         var raw = el.getAttribute('data-alumni') || el.dataset.alumni;
+        if (!raw) return null;
+        try {
+            return JSON.parse(raw);
+        } catch (err) {
+            return null;
+        }
+    }
+
+    function parseScreeningPayload(el) {
+        var raw = el.getAttribute('data-screening') || el.dataset.screening;
         if (!raw) return null;
         try {
             return JSON.parse(raw);
@@ -195,56 +236,33 @@
         });
 
         document.addEventListener('click', function (event) {
+            var trigger = event.target.closest('.js-ulm-screening-trigger');
+            if (!trigger) return;
+            var payload = parseScreeningPayload(trigger);
+            if (payload) openScreeningModal(payload);
+        });
+
+        document.addEventListener('click', function (event) {
             if (event.target.closest('[data-ulm-modal-close]')) {
                 closeModal();
             }
         });
 
         document.addEventListener('click', function (event) {
-            if (event.target.closest('.ulm-modal__photo')) {
-                var photo = qs('.ulm-modal__photo');
-                if (photo && photo.src) {
-                    openLightbox(photo.src, currentPhotoIndex);
-                }
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (event.target.closest('[data-ulm-lightbox-close]')) {
-                closeLightbox();
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (event.target.closest('[data-ulm-lightbox-next]')) {
-                nextLightboxImage();
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (event.target.closest('[data-ulm-lightbox-prev]')) {
-                prevLightboxImage();
+            if (event.target.closest('[data-ulm-screening-close]')) {
+                closeScreeningModal();
             }
         });
 
         document.addEventListener('keydown', function (event) {
-            var lightbox = qs('#ulm-lightbox');
-            var isLightboxOpen = lightbox && lightbox.classList.contains('is-open');
+            var screeningModal = qs('#ulm-screening-modal');
+            var isScreeningModalOpen = screeningModal && screeningModal.classList.contains('is-open');
 
             if (event.key === 'Escape') {
-                if (isLightboxOpen) {
-                    closeLightbox();
+                if (isScreeningModalOpen) {
+                    closeScreeningModal();
                 } else {
                     closeModal();
-                }
-            }
-
-            if (isLightboxOpen) {
-                if (event.key === 'ArrowRight') {
-                    nextLightboxImage();
-                }
-                if (event.key === 'ArrowLeft') {
-                    prevLightboxImage();
                 }
             }
         });
@@ -260,6 +278,16 @@
             }
         });
 
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                var trigger = event.target.closest('.js-ulm-screening-trigger');
+                if (!trigger) return;
+                event.preventDefault();
+                var payload = parseScreeningPayload(trigger);
+                if (payload) openScreeningModal(payload);
+            }
+        });
+
         eventsInitialized = true;
     }
 
@@ -268,4 +296,6 @@
     } else {
         bindTriggers();
     }
+
+    window.ULMOpenScreeningModal = openScreeningModal;
 })();

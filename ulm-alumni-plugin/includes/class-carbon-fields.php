@@ -307,6 +307,9 @@ class ULM_Carbon_Fields {
 				Field::make( 'text', 'screening_location', __( 'Location', 'ulm-alumni' ) )
 					->set_help_text( __( 'Format: City, State', 'ulm-alumni' ) ),
 				Field::make( 'text', 'screening_venue', __( 'Venue', 'ulm-alumni' ) ),
+				Field::make( 'text', 'screening_tickets_url', __( 'Tickets URL', 'ulm-alumni' ) )
+					->set_attribute( 'type', 'url' )
+					->set_help_text( __( 'https://example.com', 'ulm-alumni' ) ),
 				Field::make( 'textarea', 'screening_description', __( 'Description', 'ulm-alumni' ) )
 					->set_rows( 4 ),
 			) )

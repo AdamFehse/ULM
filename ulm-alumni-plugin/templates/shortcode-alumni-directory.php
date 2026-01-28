@@ -87,17 +87,6 @@ $stats = ULM_Alumni_Stats::get_all_stats();
     </div>
 <?php endif; ?>
 
-<?php if ( empty( $GLOBALS['ulm_lightbox_rendered'] ) ) : ?>
-    <?php $GLOBALS['ulm_lightbox_rendered'] = true; ?>
-    <!-- Lightbox for enlarged images -->
-    <div class="ulm-lightbox" id="ulm-lightbox" aria-hidden="true">
-        <button class="ulm-lightbox__close" type="button" aria-label="Close lightbox" data-ulm-lightbox-close>&times;</button>
-        <button class="ulm-lightbox__prev" type="button" aria-label="Previous image" data-ulm-lightbox-prev>‹</button>
-        <img class="ulm-lightbox__image" src="" alt="" />
-        <button class="ulm-lightbox__next" type="button" aria-label="Next image" data-ulm-lightbox-next">›</button>
-    </div>
-<?php endif; ?>
-
 <!-- Search, Filter & Sort Controls -->
 <div class="ulm-container">
     <div class="ulm-alumni-filters">
